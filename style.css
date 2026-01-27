@@ -1,0 +1,172 @@
+:root {
+  --bg: #000;
+  --card: rgba(25, 0, 10, 0.88);
+
+  --red: #ff0000;
+  --red2: #ff4444;
+  --violet: #c112ff;
+
+  --text: #ffffff;
+  --muted: #dddddd;
+
+  --radius: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "JetBrains Mono", monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-size: 18px;
+  overflow-x: hidden;
+}
+
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  background:
+  radial-gradient(circle at top left,
+                  rgba(255, 0, 0, 0.35),
+                  transparent 60%),
+                  radial-gradient(circle at bottom right,
+                                  rgba(190, 20, 255, 0.25),
+                                  transparent 65%);
+                  z-index: -1;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+header {
+  text-align: center;
+  padding: 5rem 1rem 3rem;
+}
+
+.logo {
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: var(--red);
+  text-shadow: 0 0 35px rgba(255, 0, 0, 0.9);
+}
+
+.github-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--red2);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.github-link:hover {
+  color: white;
+}
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 2rem;
+}
+
+section {
+  margin-bottom: 4rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
+  color: var(--red2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.6rem;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+
+  border: 1px solid rgba(255, 0, 0, 0.25);
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.15);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  display: flex;
+  flex-direction: column;
+
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 40px rgba(255, 0, 0, 0.55);
+}
+
+.card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.small {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.badges {
+  margin: 0.8rem 0 1rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  filter: brightness(2);
+}
+
+.rust-icon {
+  filter: invert(1) brightness(1);
+}
+
+.bash-icon {
+  filter: brightness(4);
+}
+
+.links {
+  margin-top: auto;
+  padding-top: 1.2rem;
+  font-size: 0.9rem;
+  color: var(--red2);
+}
+
+.links a {
+  color: var(--red);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.links a:hover {
+  color: white;
+}
+
+footer {
+  text-align: center;
+  margin-top: 4rem;
+  padding-bottom: 2rem;
+}
+
+footer p {
+  color: var(--muted);
+  opacity: 0.5;
+  font-size: 0.9rem;
+}
