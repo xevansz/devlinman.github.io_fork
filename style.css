@@ -390,11 +390,108 @@ body.lights-off-mode main {
     pointer-events: none;
 }
 
+/* Safe areas (notched devices) and touch targets */
+#lights-toggle {
+    top: max(1.5rem, env(safe-area-inset-top));
+    right: max(1.5rem, env(safe-area-inset-right));
+    min-width: 44px;
+    min-height: 44px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+main {
+    padding-left: max(2rem, env(safe-area-inset-left));
+    padding-right: max(2rem, env(safe-area-inset-right));
+}
+
+.scroll-hint {
+    bottom: max(2rem, env(safe-area-inset-bottom));
+}
+
+.card {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .scroll-hint {
+        animation: none;
+    }
+}
+
 @media (max-width: 768px) {
     html {
         scroll-behavior: auto;
     }
 
+    body {
+        font-size: 16px;
+    }
+
+    header#hero {
+        padding: 1.5rem;
+        min-height: 100dvh;
+    }
+
+    .logo {
+        font-size: clamp(2rem, 10vw, 3.8rem);
+    }
+
+    .hero-subtitle {
+        margin-bottom: 2rem;
+    }
+
+    .stylish-divider {
+        max-width: 100%;
+    }
+
+    main {
+        padding: 1.5rem;
+    }
+
+    section {
+        margin-bottom: 3rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .card,
+    .card.interest-card {
+        padding: 1.25rem;
+    }
+
+    .interest-icon-wrapper {
+        width: 64px;
+        height: 64px;
+    }
+
+    .interest-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    footer {
+        margin-top: 3rem;
+        padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: no-preference) {
     * {
         transition-timing-function: linear !important;
         animation-timing-function: linear !important;
