@@ -241,7 +241,7 @@ h2 {
 .icon {
   width: 28px;
   height: 28px;
-  filter: brightness(2);
+  /* filter: brightness(2); */
 }
 
 .rust-icon {
@@ -250,6 +250,10 @@ h2 {
 
 .bash-icon {
   filter: brightness(4);
+}
+
+.emacs-icon {
+  filter: brightness(2.5);
 }
 
 .links {
