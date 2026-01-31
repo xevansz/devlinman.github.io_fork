@@ -86,11 +86,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    let heroHeight = 0;
     function resize() {
         width = window.innerWidth;
         height = window.innerHeight;
         canvas.width = width;
         canvas.height = height;
+        if (heroSection) heroHeight = heroSection.offsetHeight;
         const newCount = getParticleCount();
         if (newCount !== particleCount) {
             particleCount = newCount;
@@ -209,49 +211,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        draw() {
-            let currentAlpha = this.alpha;
-
-            // Interpolate Color: Original -> Target (Theme Color)
-            // rippleLife is 1.0 (Target) -> 0.0 (Original)
+        getDrawState() {
             const factor = Math.min(1, Math.max(0, this.rippleLife));
-
-            // Target Color from global state
-            const r = Math.round(
-                this.rgb.r + (targetColor.r - this.rgb.r) * factor,
-            );
-            const g = Math.round(
-                this.rgb.g + (targetColor.g - this.rgb.g) * factor,
-            );
-            const b = Math.round(
-                this.rgb.b + (targetColor.b - this.rgb.b) * factor,
-            );
-
-            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-
-            if (this.rippleLife > 0.1) {
-                ctx.shadowBlur = 15 * this.rippleLife;
-                ctx.shadowColor = `rgba(${targetColor.r}, ${targetColor.g}, ${targetColor.b}, ${this.rippleLife})`;
-                currentAlpha = Math.max(this.alpha, this.rippleLife * 0.8);
-            } else {
-                ctx.shadowBlur = 0;
-                ctx.shadowColor = "transparent";
-            }
-
-            ctx.globalAlpha = currentAlpha;
-            ctx.beginPath();
-            // Draw at position + visual offset
-            ctx.arc(
-                this.x + this.dx,
-                this.y + this.dy,
-                this.size,
-                0,
-                Math.PI * 2,
-            );
-            ctx.fill();
-
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = 1;
+            const r = Math.round(this.rgb.r + (targetColor.r - this.rgb.r) * factor);
+            const g = Math.round(this.rgb.g + (targetColor.g - this.rgb.g) * factor);
+            const b = Math.round(this.rgb.b + (targetColor.b - this.rgb.b) * factor);
+            const hasRipple = this.rippleLife > 0.1;
+            const alpha = hasRipple ? Math.max(this.alpha, this.rippleLife * 0.8) : this.alpha;
+            return { r, g, b, alpha, hasRipple, x: this.x + this.dx, y: this.y + this.dy, size: this.size };
         }
     }
 
@@ -279,14 +246,48 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const time = Date.now() * 0.001;
-        particles.forEach((p) => {
-            p.update(time);
-            p.draw();
-        });
+        particles.forEach((p) => p.update(time));
+
+        // Two-pass draw: no-shadow first (one state set per frame), then ripple particles
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = "transparent";
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            const s = p.getDrawState();
+            if (s.hasRipple) continue;
+            ctx.globalAlpha = s.alpha;
+            ctx.fillStyle = `rgb(${s.r},${s.g},${s.b})`;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            const s = p.getDrawState();
+            if (!s.hasRipple) continue;
+            ctx.globalAlpha = s.alpha;
+            ctx.fillStyle = `rgb(${s.r},${s.g},${s.b})`;
+            ctx.shadowBlur = 15 * p.rippleLife;
+            ctx.shadowColor = `rgba(${targetColor.r},${targetColor.g},${targetColor.b},${p.rippleLife})`;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+
         animId = requestAnimationFrame(animate);
     }
 
-    window.addEventListener("resize", resize);
+    let resizeTimer = 0;
+    window.addEventListener("resize", () => {
+        if (resizeTimer) cancelAnimationFrame(resizeTimer);
+        resizeTimer = requestAnimationFrame(() => {
+            resizeTimer = 0;
+            resize();
+        });
+    });
 
     // --- Logo Ripple Trigger ---
     const logo = document.querySelector(".header-logo");
@@ -319,9 +320,17 @@ document.addEventListener("DOMContentLoaded", () => {
         logo.addEventListener("contextmenu", (e) => e.preventDefault());
     }
 
+    let pendingMouse = { x: -1000, y: -1000 };
+    let mouseRaf = 0;
     window.addEventListener("mousemove", (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
+        pendingMouse.x = e.clientX;
+        pendingMouse.y = e.clientY;
+        if (mouseRaf) return;
+        mouseRaf = requestAnimationFrame(() => {
+            mouse.x = pendingMouse.x;
+            mouse.y = pendingMouse.y;
+            mouseRaf = 0;
+        });
     });
 
     // --- Touch interactions for mobile ---
@@ -346,21 +355,20 @@ document.addEventListener("DOMContentLoaded", () => {
         mouse.y = -1000;
     });
 
-    // --- Scroll Event ---
+    // --- Scroll Event (throttled to rAF to avoid layout thrash) ---
     const heroSection = document.getElementById("hero");
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 50) {
-            document.body.classList.add("scrolled");
-        } else {
-            document.body.classList.remove("scrolled");
-        }
+    let scrollRaf = 0;
+    const updateScrollState = () => {
+        const y = window.scrollY;
+        document.body.classList.toggle("scrolled", y > 50);
+        document.body.classList.toggle("past-hero", heroHeight > 0 && y > heroHeight);
+        scrollRaf = 0;
+    };
 
-        if (heroSection && window.scrollY > heroSection.offsetHeight) {
-            document.body.classList.add("past-hero");
-        } else {
-            document.body.classList.remove("past-hero");
-        }
-    });
+    window.addEventListener("scroll", () => {
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(updateScrollState);
+    }, { passive: true });
 
     // --- Lights Off Logic ---
     const toggleBtn = document.getElementById("lights-toggle");
