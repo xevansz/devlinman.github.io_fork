@@ -12,20 +12,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- Card Logic ---
-    const cards = document.querySelectorAll(".card");
+    // --- Card Logic (delegated + keyboard for role="link") ---
+    document.body.addEventListener("click", (e) => {
+        const card = e.target.closest(".card[data-href]");
+        if (!card || e.target.closest("a")) return;
+        const url = card.getAttribute("data-href");
+        if (url) window.open(url, "_blank");
+    });
 
-    cards.forEach((card) => {
-        card.addEventListener("click", (e) => {
-            // If the user clicked on a link inside the card, let the link handle it.
-            if (e.target.closest("a")) return;
-
-            const url = card.getAttribute("data-href");
-            if (url) {
-                // Mimic target="_blank" behavior
-                window.open(url, "_blank");
-            }
-        });
+    document.body.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        const card = e.target.closest(".card[data-href]");
+        if (!card) return;
+        e.preventDefault();
+        const url = card.getAttribute("data-href");
+        if (url) window.open(url, "_blank");
     });
 
     // --- Particle Logic ---
@@ -36,9 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let particles = [];
     let ripples = [];
 
-    // Configuration
-    const isMobile = window.innerWidth < 800;
-    const particleCount = isMobile ? 180 : 1000;
+    // Configuration (re-evaluated on resize)
+    const getParticleCount = () => (window.innerWidth < 800 ? 180 : 1000);
+    let particleCount = getParticleCount();
+    const prefersReducedMotion = () =>
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const colors = ["#270434", "#ffffff"]; // violet, White
     const mouse = { x: -1000, y: -1000 };
     const interactionRadius = 100;
@@ -86,9 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function resize() {
         width = window.innerWidth;
         height = window.innerHeight;
-        // pixel ratio 1 for mobile
         canvas.width = width;
         canvas.height = height;
+        const newCount = getParticleCount();
+        if (newCount !== particleCount) {
+            particleCount = newCount;
+            initParticles();
+        }
     }
 
     class Particle {
@@ -255,25 +262,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    let animId = null;
+
     function animate() {
+        if (prefersReducedMotion()) {
+            ctx.clearRect(0, 0, width, height);
+            animId = requestAnimationFrame(animate);
+            return;
+        }
         ctx.clearRect(0, 0, width, height);
 
-        // Update Ripples
         for (let i = ripples.length - 1; i >= 0; i--) {
             const ripple = ripples[i];
             ripple.radius += ripple.speed;
-            if (ripple.radius > ripple.maxRadius) {
-                ripples.splice(i, 1);
-            }
+            if (ripple.radius > ripple.maxRadius) ripples.splice(i, 1);
         }
 
         const time = Date.now() * 0.001;
-
         particles.forEach((p) => {
             p.update(time);
             p.draw();
         });
-        requestAnimationFrame(animate);
+        animId = requestAnimationFrame(animate);
     }
 
     window.addEventListener("resize", resize);
@@ -368,13 +378,9 @@ document.addEventListener("DOMContentLoaded", () => {
         rootMargin: "0px 0px -50px 0px",
     };
 
-    const observer = new IntersectionObserver((entries, observer) => {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-            } else {
-                entry.target.classList.remove("is-visible");
-            }
+            entry.target.classList.toggle("is-visible", entry.isIntersecting);
         });
     }, observerOptions);
 
