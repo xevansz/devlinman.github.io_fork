@@ -7,29 +7,12 @@
 
         <title>devlinman</title>
 
+        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
         <link rel="preload" href="style.css" as="style" />
-        <link
-            rel="preload"
-            href="favicon.svg"
-            as="image"
-            type="image/svg+xml"
-        />
-
+        <link rel="preload" href="favicon.svg" as="image" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-        <link
-            rel="preload"
-            as="style"
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap"
-        />
-
-        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-
-        <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap"
-            rel="stylesheet"
-        />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" />
 
         <style>
             :root {
@@ -141,7 +124,7 @@
 
         <header id="hero">
             <div class="hero-content">
-                <img src="favicon.svg" alt="Logo" class="header-logo" />
+                <img src="favicon.svg" alt="Logo" class="header-logo" width="150" height="150" />
                 <h1 class="logo">devlinman</h1>
 
                 <p class="hero-subtitle">Welcome to my domain...</p>
@@ -161,20 +144,8 @@
                     GitHub: github.com/devlinman
                 </a>
 
-                <div class="scroll-hint">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
-                    </svg>
+                <div class="scroll-hint" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
                 </div>
             </div>
         </header>
@@ -199,18 +170,11 @@
                 <h2>Projects</h2>
 
                 <div class="grid">
-                    <div
-                        class="card"
-                        data-href="https://github.com/devlinman/Procreate-thumbnailer"
-                    >
+                    <div class="card" data-href="https://github.com/devlinman/Procreate-thumbnailer" role="link" tabindex="0">
                         <h3>Procreate Thumbnailer</h3>
 
                         <div class="badges">
-                            <img
-                                class="icon rust-icon"
-                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg"
-                                alt="Rust"
-                            />
+                            <img class="icon rust-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-original.svg" alt="Rust" width="28" height="28" loading="lazy" />
                         </div>
 
                         <p>
@@ -246,23 +210,12 @@
                         </div>
                     </div>
 
-                    <div
-                        class="card"
-                        data-href="https://github.com/devlinman/whatsit"
-                    >
+                    <div class="card" data-href="https://github.com/devlinman/whatsit" role="link" tabindex="0">
                         <h3>whatsit</h3>
 
                         <div class="badges">
-                            <img
-                                class="icon"
-                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-plain.svg"
-                                alt="C++"
-                            />
-                            <img
-                                class="icon"
-                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/qt/qt-original.svg"
-                                alt="Qt"
-                            />
+                            <img class="icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-plain.svg" alt="C++" width="28" height="28" loading="lazy" />
+                            <img class="icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/qt/qt-original.svg" alt="Qt" width="28" height="28" loading="lazy" />
                         </div>
 
                         <p>
@@ -298,13 +251,11 @@
                         </div>
                     </div>
 
-                    <div
-                        class="card"
-                        data-href="https://github.com/devlinman/reOrg"
-                    >
+                    <div class="card" data-href="https://github.com/devlinman/reOrg" role="link" tabindex="0">
                         <h3>reOrg</h3>
 
                         <div class="badges">
+<<<<<<< HEAD
                             <img
                                 class="icon bash-icon"
                                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-plain.svg"
@@ -315,6 +266,10 @@
                                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/emacs/emacs-original.svg"
                                 alt="Emacs"
                             />
+=======
+                            <img class="icon bash-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-plain.svg" alt="Shell" width="28" height="28" loading="lazy" />
+                            <img class="icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/emacs/emacs-original.svg" alt="Emacs" width="28" height="28" loading="lazy" />
+>>>>>>> 6415346 (rm font duplicate, use lazy to improve performance)
                         </div>
 
                         <p>
@@ -343,18 +298,11 @@
                         </div>
                     </div>
 
-                    <div
-                        class="card"
-                        data-href="https://github.com/devlinman/REN.sh"
-                    >
+                    <div class="card" data-href="https://github.com/devlinman/REN.sh" role="link" tabindex="0">
                         <h3>REN.sh</h3>
 
                         <div class="badges">
-                            <img
-                                class="icon bash-icon"
-                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-plain.svg"
-                                alt="Bash"
-                            />
+                            <img class="icon bash-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-plain.svg" alt="Bash" width="28" height="28" loading="lazy" />
                         </div>
 
                         <p>
@@ -455,11 +403,7 @@
                 <div class="grid">
                     <div class="card interest-card">
                         <div class="interest-icon-wrapper">
-                            <img
-                                class="interest-icon"
-                                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg"
-                                alt="Arch Linux"
-                            />
+                            <img class="interest-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg" alt="Arch Linux" width="48" height="48" loading="lazy" />
                         </div>
                         <h3>Arch Linux</h3>
                         <p class="small">I use Arch, btw.</p>
@@ -467,11 +411,15 @@
 
                     <div class="card interest-card">
                         <div class="interest-icon-wrapper">
+<<<<<<< HEAD
                             <img
                                 class="interest-icon emacs-icon"
                                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/emacs/emacs-original.svg"
                                 alt="Doom Emacs"
                             />
+=======
+                            <img class="interest-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/emacs/emacs-original.svg" alt="Doom Emacs" width="48" height="48" loading="lazy" />
+>>>>>>> 6415346 (rm font duplicate, use lazy to improve performance)
                         </div>
                         <h3>Doom Emacs</h3>
                         <p class="small">Vim keybindings in an OS.</p>
